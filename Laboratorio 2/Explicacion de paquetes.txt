@@ -1,0 +1,26 @@
+
+// Paquete Curl
+Se hace una petición GET teniendo como target una dirección de este tipo:
+    http://localhost:2023/vulnerabilities/brute/?username=§user§&password=§pass§&Login=Login HTTP/1.1
+Se envia el paquete desde la dirección IP local 172.17.0.1 desde el puerto 2023 a la dirección IP del contenedor 172.17.0.2 con puerto 80, esto debido a la configuración con la que se levanto el servidor de docker, el cual definio que se redirigieran las solicitudes del puerto 2023 al puerto 80 del contenedor. El largo del Curl valido y Curl invalido solo varia por el tamaño de la contraseña y usuario. En los campos "Accept" del paquete se definen el tipo y formato de respuesta que se desea. Finalmente, se puede ver que se ha mentenido el Cookie de envio.
+
+
+// Paquete Burp
+
+Al igual que el paquete Curl se hace una petición GET al mismo target, teniendo como target una dirección de este tipo:
+    http://localhost:2023/vulnerabilities/brute/?username=§user§&password=§pass§&Login=Login HTTP/1.1
+Se puede observar que se envia desde la dirección IP local a la dirección IP del contenedor de docker. Cabe destacar que por cada paquete enviado, el puerto de envio y el largo del paquete cambia (Esto ultimo puede ser debido a que los usuarios y contraseñas van cambiando en cada paquete). Se puede ver que en los cambios "Accept" y "Accept-Language" se definen la preferencia de formato de respuesta (html) y el lenguaje de respuesta (Ingles). Tambien que el puerto de destino es el 80, esto tiene sentido, ya que, al igual que el paquete Curl, nosotros al dirigir el ataque al puerto 2023, este es redirigido al puerto 80 del contenedor de docker (De esa forma este definido al levantar el servidor vulnerable). Finalmente, tambien se puede observar la Cookie con la que se hace el ataque en el campo "Cookie".
+
+// Paquete Hydra
+
+A diferencia de los dos paquetes anteriores, los paquetes generados por Hydra no llevan mucha información. Solo se incluye el tipo de paquete HTTP (GET) el target de petición, la cookie con la que se quiera mandar, etc.
+
+
+// Diferencias entre los paquetes
+
+La unica diferencia importante entre Curl y Burp suite es que este ultimo envia varios paquetes para realizar ataques, en cambio, con Curl solo se envia una vez, en general los paquetes generados por Burp suite y Curl no se diferencian mucho entre si (solo en el orden en el que se concatenan los campos de las peticiones), ya que estos dos intentan simular el comportamiento de un navegador. En cambio, los paquetes de hydra son muy distintos a estos ultimos, ya que no intentan parecer solicitudes normales de un navegador, ya que no incluyen mucha información en los headers que definan el formato de respuesta, solo intenta enviar los paquetes con la información justa y necesaria para hacer ataques, y así conseguir llaves validas.
+
+
+// Como poder hayar cual es la herramienta que esta haciendo el ataque
+
+Para poder detectar cual herramienta esta siendo usada para hacer el ataque basta con ver los campos propios de los paquetes HTTP de las peticiones. Si las definiciones de los campos tipo "Accept" estan concatenadas primero, entonces es un ataque con Curl, si no entonces es un ataque con Burp suite. Por otro lado, para saber si es un ataque con Hydra, basta con ver la poca cantidad de campos Http definidos en los paquetes. 
