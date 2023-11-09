@@ -20,6 +20,13 @@
   scriptElement.crossOrigin = "anonymous";
 
   scriptElement.onload = function () {
+     Analyze_Web_Page()
+  };
+
+  document.head.appendChild(scriptElement);
+})();
+
+function Analyze_Web_Page(){
     const paragraph = document.querySelector("p");
 
     const key = Get_Key(paragraph);
@@ -41,10 +48,7 @@
     }
 
     Put_Decrypted_Messages_On_Screen(encrypted_messages, decrypted_messages);
-  };
-
-  document.head.appendChild(scriptElement);
-})();
+}
 
 function Get_Key(paragraph) {
   const paragraph_content = paragraph.textContent;
